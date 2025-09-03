@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
+from sklearn.metrics import classification_report, accuracy_score, confusion_matrix, roc_auc_score
 from ucimlrepo import fetch_ucirepo
 import pickle
 
@@ -35,9 +35,14 @@ model.fit(X_train, y_train)
 
 # Αξιολογείται το μοντέλο μας
 y_pred = model.predict(X_test)
+y_proba = model.predict_proba(X_test)
+
 print("Αποτελέσματα Μοντέλου")
 print("Accuracy:", accuracy_score(y_test, y_pred))
 print("\nClassification Report:\n", classification_report(y_test, y_pred))
+
+roc_auc = roc_auc_score(y_test, y_proba, multi_class="ovr", average="macro")
+print("ROC AUC (macro, OVR):", roc_auc)
 
 
 # Παίρνουμε τις προβλέψεις που κάνει το μοντέλο μας από το test set
